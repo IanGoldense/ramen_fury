@@ -1,9 +1,9 @@
 import socket
 
 
-def gather_players(players: int):
+def gather_players(player_count: int):
     # validate player count
-    if players not in (2, 3, 4, 5):
+    if player_count not in (2, 3, 4, 5):
         raise IndexError
 
     # get the hostname
@@ -15,7 +15,7 @@ def gather_players(players: int):
     server_socket.bind((host, port))  # look closely. The bind() function takes tuple as argument
 
     # wait for players
-    server_socket.listen(players)
+    server_socket.listen(player_count)
     conn, address = server_socket.accept()  # accept new connection
     print("Connection from: " + str(address))
 
@@ -32,6 +32,5 @@ def gather_players(players: int):
         # conn.send(data.encode())  # send data to the client
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    gather_players(2)
+    gather_players(3)

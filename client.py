@@ -1,5 +1,5 @@
 import socket
-#git needs to see this change
+
 
 def get_player_info() -> dict:
     """
@@ -40,12 +40,10 @@ def get_player_info() -> dict:
     }
 
 
-def client_program():
-    host = socket.gethostname()  # as both code is running on same pc
-    port = 5000  # socket server port number
-
+def client_program(client_name: str, server_addr: str):
+    port = 5000
     client_socket = socket.socket()  # instantiate
-    client_socket.connect((host, port))  # connect to the server
+    client_socket.connect((client_name, port))  # connect to the server
 
     message = input(" -> ")  # take input
 
