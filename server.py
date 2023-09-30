@@ -1,14 +1,23 @@
 import socket
 
 
-def gather_players(player_count: int):
+def print_server_details():
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+
+    print(f'=== server details ===')
+    print(f'hostname: ', hostname)
+    print(f'IP address: ', ip_address)
+
+
+def gather_players(player_count: int, lobby_open: int = 60):
     # validate player count
     if player_count not in (2, 3, 4, 5):
         raise IndexError
 
     # get the hostname
     host = socket.gethostname()
-    port = 5432
+    port = 5433
 
     # instantiate, then bind hostname and port
     server_socket = socket.socket()
@@ -28,9 +37,10 @@ def gather_players(player_count: int):
         print("from connected user: " + str(data))
 
         # data can be sent back to client here
-        # data = input(' -> ')
-        # conn.send(data.encode())  # send data to the client
+        data = input(' -> ')
+        conn.send(data.encode())  # send data to the client
 
 
 if __name__ == '__main__':
+    print_server_details()
     gather_players(3)

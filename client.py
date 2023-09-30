@@ -41,9 +41,9 @@ def get_player_info() -> dict:
 
 
 def client_program(client_name: str, server_addr: str):
-    port = 5000
+    port = 5433
     client_socket = socket.socket()  # instantiate
-    client_socket.connect((client_name, port))  # connect to the server
+    client_socket.connect((server_addr, port))  # connect to the server
 
     message = input(" -> ")  # take input
 
@@ -59,4 +59,5 @@ def client_program(client_name: str, server_addr: str):
 
 
 if __name__ == '__main__':
-    get_player_info()
+    player_info = get_player_info()
+    client_program(player_info.get('Name'), '127.0.0.1')
