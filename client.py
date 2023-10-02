@@ -10,20 +10,20 @@ def get_player_info() -> dict:
     name = input(f"enter name: ")
 
     # capture a valid birthday
-    valid_birthday = False
-    while not valid_birthday:
+    valid_date = False
+    while not valid_date:
 
-        birthdate = input(f"enter your birthday (mm/dd/yyyy): ")
+        date_of_last_ramen_meal = input(f"when was the last time oyu ate ramen? (mm/dd/yyyy): ")
         # split the string and convert to integers
-        dob_split = birthdate.split('/')
+        ramen_eaten_date_split = date_of_last_ramen_meal.split('/')
 
         try:
             # Check if we have exactly three parts
-            if len(dob_split) == 3:
-                birth_month, birth_day, birth_year = [int(part) for part in dob_split]
+            if len(ramen_eaten_date_split) == 3:
+                month, day, year = [int(part) for part in ramen_eaten_date_split]
 
-                if birth_month in range(1, 13) and birth_day in range(1, 32) and birth_year in range(1900, 2024):
-                    valid_birthday = True
+                if month in range(1, 13) and day in range(1, 32) and year in range(1900, 2024):
+                    valid_date = True
                 else:
                     print("Invalid date")
             else:
@@ -32,11 +32,14 @@ def get_player_info() -> dict:
         # start over if any error gets thrown
         except:
             print("general error, try again.")
-            valid_birthday = False
+            valid_date = False
+
+        finally:
+            date_of_last_ramen_meal = "never"
 
     return {
         "Name": name,
-        "Date of Birth": birthdate
+        "Ate ramen on": date_of_last_ramen_meal
     }
 
 
@@ -60,4 +63,4 @@ def client_program(client_name: str, server_addr: str):
 
 if __name__ == '__main__':
     player_info = get_player_info()
-    client_program(player_info.get('Name'), '127.0.0.1')
+    client_program(player_info.get('Name'), '192.168.0.14')

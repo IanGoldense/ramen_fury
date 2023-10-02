@@ -1,5 +1,18 @@
 import socket
 
+###########
+# Globals #
+###########
+
+protein_ingredient_cards = ("Naruto", "Eggs", "Chashu", "Tofu")
+veg_ingredient_cards = ("Mushrooms", "Scallions", "Corn", "Tofu")
+garnish_cards = ("Chili Peppers", "Nori")
+flavor_packets = ("Fury", "Soy Sauce", "Beef", "Chicken", "Shrimp")
+
+
+#############
+# Functions #
+#############
 
 def print_server_details():
     hostname = socket.gethostname()
@@ -40,6 +53,14 @@ def gather_players(player_count: int, lobby_open: int = 60):
         data = input(' -> ')
         conn.send(data.encode())  # send data to the client
 
+
+def send_message(connection, message: str):
+    for user in users:
+        connection.send(message.encode())  # send data to the client
+
+###########
+# Classes #
+###########
 
 if __name__ == '__main__':
     print_server_details()
