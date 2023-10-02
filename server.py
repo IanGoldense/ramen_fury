@@ -4,8 +4,9 @@ import socket
 # Globals #
 ###########
 
-protein_ingredient_cards = ("Naruto", "Eggs", "Chashu", "Tofu")
-veg_ingredient_cards = ("Mushrooms", "Scallions", "Corn", "Tofu")
+protein_ingredient_cards = ("Naruto", "Eggs", "Chashu")
+hybrid_ingredient_cards = ("Tofu")
+veg_ingredient_cards = ("Mushrooms", "Scallions", "Corn")
 garnish_cards = ("Chili Peppers", "Nori")
 flavor_packets = ("Fury", "Soy Sauce", "Beef", "Chicken", "Shrimp")
 
@@ -58,9 +59,97 @@ def send_message(connection, message: str):
     for user in users:
         connection.send(message.encode())  # send data to the client
 
+
 ###########
 # Classes #
 ###########
+
+class Card:
+    def __init__(self, card_type, ):
+        self.card_type = card_type,
+
+
+class Deck:
+    def __init__(self):
+        # five of each
+        self.vegetable_cards = None
+        self.protein_cards = None
+        self.hybrid_cards = None
+
+        # five of each
+        self.beef_flavor = None
+        self.shrimp_flavor = None
+        self.soy_sauce_flavor = None
+        self.chicken_flavor = None
+        self.fury_flavor = None
+
+        self.nori_cards = 8
+        self.chili_peppers = 12
+
+    def shuffle(self):
+        ...
+
+    def cut(self):
+        ...
+
+    def sort(self):
+        ...
+
+    def deal(self):
+        ...
+
+    def draw_one(self):
+        ...
+
+
+class DiscardPile:
+    def __init__(self):
+        self.cards = []  # should be converted to a stack later on.
+
+
+class Pantry:
+    def __init__(self):
+        self.cards = None  # list of 4 face-up cards
+
+
+class Bowl:
+    def __init__(self):
+        self.eaten = False
+        self.ingredients = []  # should likely be a stack later
+        self.value = 0
+
+    def eat(self):
+        ...
+
+    def empty(self):
+        ...
+
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.last_ate_ramen = None
+        self.spoons = 2
+        self.bowls = {}
+
+    def restock(self):
+        ...
+
+    def draw(self):
+        ...
+
+    def eat(self):
+        ...
+
+    def draw_from_pantry(self):
+        ...
+
+    def empty_bowl(self):
+        ...
+
+    def add_ingredient(self):
+        ...
+
 
 if __name__ == '__main__':
     print_server_details()
