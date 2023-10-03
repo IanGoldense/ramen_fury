@@ -64,10 +64,41 @@ def send_message(connection, message: str):
 # Classes #
 ###########
 
+class Game:
+    def __init__(self, num_players: int, roster: list):
+        self.num_players = num_players
+        self.roster = roster
+        self.active_player = None
+        self.player_order = None
+
+    def __determine_player_order(self, roster) -> tuple:
+        # take in roster as a list of instantiated players
+
+        # sort list by date last bowl of ramen was eaten
+
+        # return tuple of instantiated players
+        ...
+
+    def next_player(self):
+        # cycle through the tuple of players, this will be a cool chance to use yield
+        ...
+
 class Card:
     def __init__(self, card_type, ):
         self.card_type = card_type,
 
+    def scoop(self):
+        ...
+
+    def discard(self):
+        ...
+
+
+class FlavorCard(Card):
+    def __init__(self, flavor, card_type):
+        super().__init__(card_type)
+        self.flavor = flavor
+        self.scoring_guide =
 
 class Deck:
     def __init__(self):
@@ -131,7 +162,7 @@ class Player:
         self.last_ate_ramen = None
         self.spoons = 2
         self.bowls = {}
-
+        self.hand = []
     def restock(self):
         ...
 
@@ -148,6 +179,9 @@ class Player:
         ...
 
     def add_ingredient(self):
+        ...
+
+    def play_garnish(self):
         ...
 
 
