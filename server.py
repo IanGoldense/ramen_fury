@@ -83,6 +83,7 @@ class Game:
         # cycle through the tuple of players, this will be a cool chance to use yield
         ...
 
+
 class Card:
     def __init__(self, card_type, ):
         self.card_type = card_type,
@@ -96,9 +97,25 @@ class Card:
 
 class FlavorCard(Card):
     def __init__(self, flavor, card_type):
-        super().__init__(card_type)
+        # super().__init__(card_type)
         self.flavor = flavor
-        self.scoring_guide =
+        self.scoring_guide = {}
+
+
+class BeefFlavor(FlavorCard):
+    def __init__(self):
+        self.scoring_guide = {
+            'unique1': 2,
+            'unique2': 5,
+            'unique3': 9,
+            'unique4': 14
+        }
+
+
+class FuryFlavor(FlavorCard):
+    def __init__(self):
+        self.scoring_guide = (2, 4, 6, 8)
+
 
 class Deck:
     def __init__(self):
@@ -163,6 +180,7 @@ class Player:
         self.spoons = 2
         self.bowls = {}
         self.hand = []
+
     def restock(self):
         ...
 
