@@ -1,3 +1,4 @@
+import random
 import socket
 
 ###########
@@ -85,19 +86,12 @@ class Game:
 
 
 class Card:
-    def __init__(self, card_type, ):
-        self.card_type = card_type,
-
-    def scoop(self):
-        ...
-
-    def discard(self):
-        ...
+    def __init__(self, card_type):
+        self.card_type = card_type
 
 
 class FlavorCard(Card):
-    def __init__(self, flavor, card_type):
-        # super().__init__(card_type)
+    def __init__(self, flavor):
         self.flavor = flavor
         self.scoring_guide = {}
 
@@ -119,7 +113,13 @@ class FuryFlavor(FlavorCard):
 
 class Deck:
     def __init__(self):
-        # five of each
+        self.cards = []
+
+        # add each type of card to the deck
+        for veg in veg_ingredient_cards:
+            self.cards.append(veg)
+
+            # five of each
         self.vegetable_cards = None
         self.protein_cards = None
         self.hybrid_cards = None
@@ -134,20 +134,25 @@ class Deck:
         self.nori_cards = 8
         self.chili_peppers = 12
 
+    def __add_num_of_card(self, num: int, card: object):
+        card_group = []
+        for i in range(0, num):
+            card_group.append()
+
     def shuffle(self):
-        ...
+        random.shuffle(self.cards)
 
     def cut(self):
-        ...
+        top_half = self.cards[:len(self.cards) // 2]
+        bottom_half = self.cards[len(self.cards) // 2:]
 
-    def sort(self):
-        ...
+        self.cards = bottom_half + top_half
 
     def deal(self):
         ...
 
     def draw_one(self):
-        ...
+        return self.cards.pop(0)
 
 
 class DiscardPile:
