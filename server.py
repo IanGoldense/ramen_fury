@@ -86,8 +86,13 @@ class Game:
 
 
 class Card:
-    def __init__(self, card_type):
-        self.card_type = card_type
+    def __init__(self):
+        pass
+
+
+class IngredientCard(Card):
+    def __init__(self, ingredient):
+        self.ingredient = ingredient
 
 
 class FlavorCard(Card):
@@ -117,12 +122,16 @@ class Deck:
 
         # add each type of card to the deck
         for veg in veg_ingredient_cards:
-            self.cards.append(veg)
+            self.__add_num_of_card(5, IngredientCard(veg))
 
-            # five of each
-        self.vegetable_cards = None
-        self.protein_cards = None
-        self.hybrid_cards = None
+        for protein in protein_ingredient_cards:
+            self.__add_num_of_card(5, IngredientCard(protein))
+
+        for hybrid in hybrid_ingredient_cards:
+            self.__add_num_of_card(5, IngredientCard(hybrid))
+
+        for flavor in FlavorCard.__subclasses__():
+            self.__add_num_of_card(5, flavor)
 
         # five of each
         self.beef_flavor = None
@@ -137,7 +146,9 @@ class Deck:
     def __add_num_of_card(self, num: int, card: object):
         card_group = []
         for i in range(0, num):
-            card_group.append()
+            card_group.append(card)
+
+        return card_group
 
     def shuffle(self):
         random.shuffle(self.cards)
