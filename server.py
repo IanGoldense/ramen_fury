@@ -179,8 +179,9 @@ class Deck:
         for flavor in FlavorCard.__subclasses__():
             self._add_num_of_card(5, flavor())
 
-        self.nori_cards = 8
-        self.chili_peppers = 12
+        # add 8 Nori cards and 12 chili pepper cards
+        self._add_num_of_card(8, Nori())
+        self._add_num_of_card(12, ChiliPepper())
 
     def _add_num_of_card(self, num: int, card: object):
         card_group = []
@@ -198,8 +199,12 @@ class Deck:
 
         self.cards = bottom_half + top_half
 
-    def deal(self):
-        ...
+    def deal(self, roster):
+        # everyone in the roster gets five cards
+        dealer_rotation = roster * 5
+
+        for player in dealer_rotation:
+            player.draw(self.draw_one())
 
     def draw_one(self):
         return self.cards.pop(0)
@@ -207,7 +212,10 @@ class Deck:
 
 class DiscardPile:
     def __init__(self):
-        self.cards = []  # should be converted to a stack later on.
+        self.cards = []
+
+    def discard(self, card):
+        self.cards.append(card)
 
 
 class Pantry:
@@ -239,8 +247,8 @@ class Player:
     def restock(self):
         ...
 
-    def draw(self):
-        ...
+    def draw(self, card):
+        self.hand.append(card)
 
     def eat(self):
         ...
