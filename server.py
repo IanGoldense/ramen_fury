@@ -6,14 +6,14 @@ import socket
 ###########
 
 protein_ingredient_cards = ("Naruto", "Eggs", "Chashu")
-hybrid_ingredient_cards = ("Tofu")
+hybrid_ingredient_cards = ("Tofu",)
 veg_ingredient_cards = ("Mushrooms", "Scallions", "Corn")
 garnish_cards = ("Chili Peppers", "Nori")
 flavor_packets = ("Fury", "Soy Sauce", "Beef", "Chicken", "Shrimp")
 
 
 #############
-# Functions #
+# Functions
 #############
 
 def print_server_details():
@@ -89,6 +89,10 @@ class Card:
     def __init__(self):
         pass
 
+    def __str__(self):
+        # gets the first value from the class instance's dictionary of attributes
+        return self.__dict__[next(iter(self.__dict__))]
+
 
 class IngredientCard(Card):
     def __init__(self, ingredient):
@@ -96,8 +100,8 @@ class IngredientCard(Card):
 
 
 class FlavorCard(Card):
-    def __init__(self, flavor):
-        self.flavor = flavor
+    def __init__(self):
+        self.flavor = 'plain'
         self.scoring_guide = {}
 
 
@@ -120,20 +124,18 @@ class Deck:
     def __init__(self):
         self.cards = []
 
-        # add each type of card to the deck
-        for veg in veg_ingredient_cards:
-            self.__add_num_of_card(5, IngredientCard(veg))
+        self.cards.append(Card())  # TODO: delete this line later
 
-        for protein in protein_ingredient_cards:
-            self.__add_num_of_card(5, IngredientCard(protein))
+        # add five of each type of ingredient card to the deck
+        all_ingredients = veg_ingredient_cards + protein_ingredient_cards + hybrid_ingredient_cards
+        for ingredient in all_ingredients:
+            self._add_num_of_card(5, IngredientCard(ingredient))
 
-        for hybrid in hybrid_ingredient_cards:
-            self.__add_num_of_card(5, IngredientCard(hybrid))
-
+        # add five of each flavor type to the deck
         for flavor in FlavorCard.__subclasses__():
-            self.__add_num_of_card(5, flavor)
+            self._add_num_of_card(5, flavor)
 
-        # five of each
+        # five of each. should be covered once all subclasses are built.
         self.beef_flavor = None
         self.shrimp_flavor = None
         self.soy_sauce_flavor = None
@@ -143,10 +145,10 @@ class Deck:
         self.nori_cards = 8
         self.chili_peppers = 12
 
-    def __add_num_of_card(self, num: int, card: object):
+    def _add_num_of_card(self, num: int, card: object):
         card_group = []
         for i in range(0, num):
-            card_group.append(card)
+            self.cards.append(card)
 
         return card_group
 
@@ -220,5 +222,9 @@ class Player:
 
 
 if __name__ == '__main__':
-    print_server_details()
-    gather_players(3)
+    # print_server_details()
+    # gather_players(3)
+
+    # testing
+    test_deck = Deck()
+    print(test_deck.cards)
