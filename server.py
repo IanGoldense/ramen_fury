@@ -99,6 +99,18 @@ class IngredientCard(Card):
         self.ingredient = ingredient
 
 
+class Nori(IngredientCard):
+    def __init__(self):
+        self.flavor = 'Nori'
+        self.scoring_guide = 1
+
+
+class ChiliPepper(IngredientCard):
+    def __init__(self):
+        self.flavor = 'Chili Pepper'
+        self.scoring_guide = -1  # unless with fury flavor not sure how to account for
+
+
 class FlavorCard(Card):
     def __init__(self):
         self.flavor = 'plain'
@@ -107,16 +119,47 @@ class FlavorCard(Card):
 
 class BeefFlavor(FlavorCard):
     def __init__(self):
+        self.flavor = 'Beef Flavor'
         self.scoring_guide = {
-            'unique1': 2,
-            'unique2': 5,
-            'unique3': 9,
-            'unique4': 14
+            'unique_protein1': 2,
+            'unique_protein2': 5,
+            'unique_protein3': 9,
+            'unique_protein4': 14
+        }
+
+
+class SoySauceFlavor(FlavorCard):
+    def __init__(self):
+        self.flavor = 'SoySauce Flavor'
+        self.scoring_guide = {
+            'unique_veg1': 2,
+            'unique_veg2': 5,
+            'unique_veg3': 9,
+            'unique_veg4': 14
+        }
+
+
+class ShrimpFlavor(FlavorCard):
+    def __init__(self):
+        self.flavor = 'Shrimp Flavor'
+        self.scoring_guide = {
+            'protein and veg': 4,
+            'two protein and two veg': 8
+        }
+
+
+class ChickenFlavor(FlavorCard):
+    def __init__(self):
+        self.flavor = 'Chicken Flavor'
+        self.scoring_guide = {
+            "pair": 6,
+            "three of a kind": 10
         }
 
 
 class FuryFlavor(FlavorCard):
     def __init__(self):
+        self.flavor = 'Fury Flavor'
         self.scoring_guide = (2, 4, 6, 8)
 
 
@@ -124,23 +167,17 @@ class Deck:
     def __init__(self):
         self.cards = []
 
-        self.cards.append(Card())  # TODO: delete this line later
-
         # add five of each type of ingredient card to the deck
-        all_ingredients = veg_ingredient_cards + protein_ingredient_cards + hybrid_ingredient_cards
+        all_ingredients = (veg_ingredient_cards +
+                           protein_ingredient_cards +
+                           hybrid_ingredient_cards)
+
         for ingredient in all_ingredients:
             self._add_num_of_card(5, IngredientCard(ingredient))
 
-        # add five of each flavor type to the deck
+        # add five of each flavor card to the deck
         for flavor in FlavorCard.__subclasses__():
-            self._add_num_of_card(5, flavor)
-
-        # five of each. should be covered once all subclasses are built.
-        self.beef_flavor = None
-        self.shrimp_flavor = None
-        self.soy_sauce_flavor = None
-        self.chicken_flavor = None
-        self.fury_flavor = None
+            self._add_num_of_card(5, flavor())
 
         self.nori_cards = 8
         self.chili_peppers = 12
