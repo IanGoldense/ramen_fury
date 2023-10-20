@@ -72,7 +72,7 @@ class Game:
         self.active_player = None
         self.player_order = None
 
-    def __determine_player_order(self, roster) -> tuple:
+    def __determine_player_order(self, roster: list) -> tuple:
         # take in roster as a list of instantiated players
 
         # sort list by date last bowl of ramen was eaten
@@ -82,7 +82,7 @@ class Game:
 
     def next_player(self):
         # cycle through the tuple of players, this will be a cool chance to use yield
-        ...
+        yield
 
 
 class Card:
@@ -173,17 +173,17 @@ class Deck:
                            hybrid_ingredient_cards)
 
         for ingredient in all_ingredients:
-            self._add_num_of_card(5, IngredientCard(ingredient))
+            self.__add_num_of_card(5, IngredientCard(ingredient))
 
         # add five of each flavor card to the deck
         for flavor in FlavorCard.__subclasses__():
-            self._add_num_of_card(5, flavor())
+            self.__add_num_of_card(5, flavor())
 
         # add 8 Nori cards and 12 chili pepper cards
-        self._add_num_of_card(8, Nori())
-        self._add_num_of_card(12, ChiliPepper())
+        self.__add_num_of_card(8, Nori())
+        self.__add_num_of_card(12, ChiliPepper())
 
-    def _add_num_of_card(self, num: int, card: object):
+    def __add_num_of_card(self, num: int, card: object):
         card_group = []
         for i in range(0, num):
             self.cards.append(card)
@@ -219,8 +219,19 @@ class DiscardPile:
 
 
 class Pantry:
-    def __init__(self):
-        self.cards = None  # list of 4 face-up cards
+    def __init__(self, deck):
+        self.cards = []  # list of 4 face-up cards
+        self.__build(deck)
+
+    def __build(self, deck):
+        for card in range(0, 4):
+            self.cards.append(deck.draw_one())
+
+    def restock(self):
+        # discard all 4 cards
+
+        # dr
+        ...
 
 
 class Bowl:
@@ -240,9 +251,11 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.last_ate_ramen = None
-        self.spoons = 2
-        self.bowls = {}
         self.hand = []
+        self.spoons = 2
+        self.bowl1 = {}
+        self.bowl2 = {}
+        self.bowl3 = {}
 
     def restock(self):
         ...
