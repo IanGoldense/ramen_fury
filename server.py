@@ -1,5 +1,7 @@
 import random
 import socket
+from collections import deque
+from icecream import ic
 
 ###########
 # Globals #
@@ -88,6 +90,9 @@ class Game:
 class Card:
     def __init__(self):
         pass
+
+    def __call__(self, *args, **kwargs):
+        return self.__str__()
 
     def __str__(self):
         # gets the first value from the class instance's dictionary of attributes
@@ -237,7 +242,7 @@ class Pantry:
 class Bowl:
     def __init__(self):
         self.eaten = False
-        self.ingredients = []  # should likely be a stack later
+        self.ingredients = deque()
         self.value = 0
 
     def eat(self):
@@ -253,12 +258,13 @@ class Player:
         self.last_ate_ramen = None
         self.hand = []
         self.spoons = 2
-        self.bowl1 = {}
-        self.bowl2 = {}
-        self.bowl3 = {}
+        self.bowl1 = Bowl()
+        self.bowl2 = Bowl()
+        self.bowl3 = Bowl()
 
-    def restock(self):
-        ...
+    def restock(self, pantry):
+        pantry.cards.clear()
+        pantry.restock()
 
     def draw(self, card):
         self.hand.append(card)
@@ -266,8 +272,18 @@ class Player:
     def eat(self):
         ...
 
-    def draw_from_pantry(self):
-        ...
+    def draw_from_pantry(self, pantry, deck):
+        # player chooses card from pantry
+        print(f"cards in pantry: ", pantry.cards)
+        picked_card = input("choose card 1 - 4: ")
+        picked_card = int(picked_card) - 1
+
+        # card is added to their hand
+        self.hand.append(pantry.cards[picked_card])
+
+        # new card is added to the pantry from the deck
+        while pantry.cards < 4:
+            pantry.cards.append(deck.draw_one())
 
     def empty_bowl(self):
         ...
@@ -285,4 +301,7 @@ if __name__ == '__main__':
 
     # testing
     test_deck = Deck()
+    test_deck.shuffle()
+    test_pantry = Pantry(test_deck)
+    test_player = Player('Ian')
     print(test_deck.cards)
