@@ -241,15 +241,21 @@ class Pantry:
 
 class Bowl:
     def __init__(self):
+        self.ingredients = deque(maxlen=5)
         self.eaten = False
-        self.ingredients = deque()
         self.value = 0
 
     def eat(self):
-        ...
+        # total up ingredients based on flavor packet scoring guide
+        pass
 
-    def empty(self):
-        ...
+    def empty(self, discard_pile):
+        # discard all ingredients to discard pile
+        for ingredient in self.ingredients:
+            discard_pile.discard(ingredient)
+
+        # reset bowl
+        self.value = 0
 
 
 class Player:
@@ -261,13 +267,14 @@ class Player:
         self.bowl1 = Bowl()
         self.bowl2 = Bowl()
         self.bowl3 = Bowl()
+        self.score = 0
 
     def restock(self, pantry):
         pantry.cards.clear()
         pantry.restock()
 
-    def draw(self, card):
-        self.hand.append(card)
+    def draw(self, deck):
+        self.hand.append(deck.draw_one)
 
     def eat(self):
         ...
@@ -285,13 +292,13 @@ class Player:
         while pantry.cards < 4:
             pantry.cards.append(deck.draw_one())
 
-    def empty_bowl(self):
+    def empty_bowl(self, bowl, discard_pile):
+        bowl.empty(discard_pile)
+
+    def add_ingredient(self, ingredient, bowl):
         ...
 
-    def add_ingredient(self):
-        ...
-
-    def play_garnish(self):
+    def play_garnish(self, player, bowl):
         ...
 
 
