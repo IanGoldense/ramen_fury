@@ -243,11 +243,14 @@ class Bowl:
     def __init__(self):
         self.ingredients = deque(maxlen=5)
         self.eaten = False
+        self.flavor = None
         self.value = 0
 
-    def eat(self):
+
+    def eat(self) -> int:
         # total up ingredients based on flavor packet scoring guide
-        pass
+        score = 0
+        # if self.ingredients
 
     def empty(self, discard_pile):
         # discard all ingredients to discard pile
@@ -261,7 +264,7 @@ class Bowl:
 class Player:
     def __init__(self, name):
         self.name = name
-        self.last_ate_ramen = None
+        self.last_ate_ramen = None  # TODO: make this a parameter later
         self.hand = []
         self.spoons = 2
         self.bowl1 = Bowl()
@@ -283,6 +286,7 @@ class Player:
         # player chooses card from pantry
         print(f"cards in pantry: ", pantry.cards)
         picked_card = input("choose card 1 - 4: ")
+        # TODO: sanitize the input loop and pass in valid options for player to choose from
         picked_card = int(picked_card) - 1
 
         # card is added to their hand
@@ -296,10 +300,29 @@ class Player:
         bowl.empty(discard_pile)
 
     def add_ingredient(self, ingredient, bowl):
-        ...
 
-    def play_garnish(self, player, bowl):
-        ...
+        # adding a flavor packet, declares bowl flavor and determines scoring guide
+        if ingredient is type(FlavorCard) and bowl.flavor is None:
+            bowl.flavor = ingredient
+            bowl.ingredients.append(ingredient)
+
+        elif ingredient is type(FlavorCard) and bowl.flavor is not None:
+            raise Exception("cannot add more than one flavor packet to a bowl.")
+
+        # add normal ingredients
+        else:
+            bowl.ingredients.append(ingredient)
+
+    def play_garnish(self, player):
+        if self.hand.__contains__(Nori):
+            print(f"{player.name}'s bowls. input 1,2 or 3:"
+                  f"{player.bowl1}"
+                  f"{player.bowl2}"
+                  f"{player.bowl3}")
+
+            bowl = input("where to play garnish?")
+            # player.
+            # TODO: come back to this because i forgor what i was doing
 
 
 if __name__ == '__main__':
@@ -311,4 +334,3 @@ if __name__ == '__main__':
     test_deck.shuffle()
     test_pantry = Pantry(test_deck)
     test_player = Player('Ian')
-    print(test_deck.cards)
