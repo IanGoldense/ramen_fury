@@ -161,12 +161,25 @@ class ChickenFlavor(FlavorCard):
             "three of a kind": 10
         }
 
+    def calculate_score(self, ingredients: deque) -> int:
+        pass
+        # score = 0
+        #
+        #
+        # return score
 
 class FuryFlavor(FlavorCard):
     def __init__(self):
         self.flavor = 'Fury Flavor'
         self.scoring_guide = (2, 4, 6, 8)
 
+    def calculate_score(self, ingredients: deque) -> int:
+        score = 0
+        for _ in ingredients:
+            if _ is ChiliPepper:
+                score += 2
+
+        return score
 
 class Deck:
     def __init__(self):
@@ -246,11 +259,11 @@ class Bowl:
         self.flavor = None
         self.value = 0
 
-
     def eat(self) -> int:
         # total up ingredients based on flavor packet scoring guide
         score = 0
-        # if self.ingredients
+        if self.flavor is not None:
+            self.flavor.calculate_score()
 
     def empty(self, discard_pile):
         # discard all ingredients to discard pile
@@ -300,9 +313,14 @@ class Player:
         bowl.empty(discard_pile)
 
     def add_ingredient(self, ingredient, bowl):
+        # ensure player is only adding to their own bowl
+        if bowl not in (self.bowl1, self.bowl2, self.bowl3):
+            raise ValueError("You can only add ingredients to your own bowls.")
 
         # adding a flavor packet, declares bowl flavor and determines scoring guide
-        if ingredient is type(FlavorCard) and bowl.flavor is None:
+        # checks if ingredient is a subclass of FlavorCard
+        ic(issubclass(ingredient.__class__, FlavorCard))
+        if ingredient is issubclass(ingredient.__class__, FlavorCard) and bowl.flavor is None:
             bowl.flavor = ingredient
             bowl.ingredients.append(ingredient)
 
@@ -325,12 +343,15 @@ class Player:
             # TODO: come back to this because i forgor what i was doing
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # print_server_details()
     # gather_players(3)
 
     # testing
-    test_deck = Deck()
-    test_deck.shuffle()
-    test_pantry = Pantry(test_deck)
-    test_player = Player('Ian')
+    # test_deck = Deck()
+    # test_deck.shuffle()
+    # test_discard_pile = DiscardPile()
+    # test_pantry = Pantry(test_deck)
+    # test_player = Player('Ian')
+
+    # test_player.add_ingredient(test_deck.draw_one(), test_player.bowl1)
