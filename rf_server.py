@@ -96,6 +96,7 @@ class Card:
 
     def __str__(self):
         # gets the first value from the class instance's dictionary of attributes
+        # i.e. makes every card str() the name of it's class
         return self.__dict__[next(iter(self.__dict__))]
 
 
@@ -168,6 +169,7 @@ class ChickenFlavor(FlavorCard):
         #
         # return score
 
+
 class FuryFlavor(FlavorCard):
     def __init__(self):
         self.flavor = 'Fury Flavor'
@@ -180,6 +182,7 @@ class FuryFlavor(FlavorCard):
                 score += 2
 
         return score
+
 
 class Deck:
     def __init__(self):
@@ -237,19 +240,37 @@ class DiscardPile:
 
 
 class Pantry:
-    def __init__(self, deck):
+    def __init__(self):
         self.cards = []  # list of 4 face-up cards
-        self.__build(deck)
+        self.__fill_pantry()
 
-    def __build(self, deck):
+    def __call__(self, *args, **kwargs):
+        return self.__str__()
+
+    def __str__(self) -> str:
+        card_names = ''
+        for card in self.cards:
+            card_names += f' {str(card)}'
+
+        return card_names
+
+    def __fill_pantry(self, deck):
         for card in range(0, 4):
             self.cards.append(deck.draw_one())
 
-    def restock(self):
-        # discard all 4 cards
+    def restock(self, deck, discard_pile):
+        # move old cards to the discard pile
+        for card in self.cards:
+            discard_pile.discard(card)
 
-        # dr
-        ...
+        self.cards.clear()
+        self.__fill_pantry(deck)
+
+    def pick_card(self):
+        # remove chosen card from pantry
+
+        # draw card from deck to replace it
+        pass
 
 
 class Bowl:
@@ -293,7 +314,7 @@ class Player:
         self.hand.append(deck.draw_one)
 
     def eat(self):
-        ...
+        pass
 
     def draw_from_pantry(self, pantry, deck):
         # player chooses card from pantry
@@ -343,15 +364,15 @@ class Player:
             # TODO: come back to this because i forgor what i was doing
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     # print_server_details()
     # gather_players(3)
 
     # testing
-    # test_deck = Deck()
-    # test_deck.shuffle()
-    # test_discard_pile = DiscardPile()
-    # test_pantry = Pantry(test_deck)
-    # test_player = Player('Ian')
+    test_deck = Deck()
+    test_deck.shuffle()
+    test_discard_pile = DiscardPile()
+    test_pantry = Pantry(test_deck)
+    test_player = Player('Ian')
 
-    # test_player.add_ingredient(test_deck.draw_one(), test_player.bowl1)
+# test_player.add_ingredient(test_deck.draw_one(), test_player.bowl1)
