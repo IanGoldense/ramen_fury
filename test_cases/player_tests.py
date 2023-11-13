@@ -6,9 +6,9 @@ class PlayerObjectTests(unittest.TestCase):
     def test_add_ingredients_to_bowl(self):
         player = Player('crash test dummy')
         beef = BeefFlavor()
-        tofu = IngredientCard('Naruto')
+        naruto = IngredientCard('Naruto')
 
-        for _ in (beef, tofu):
+        for _ in (beef, naruto):
             player.add_ingredient(_, player.bowl1)
 
         self.assertIsInstance(player.bowl1.ingredients[0],
@@ -18,7 +18,17 @@ class PlayerObjectTests(unittest.TestCase):
         self.assertIsNotNone(player.bowl1.flavor,
                              "the bowl's flavor was not assigned after adding a flavor card")
 
-    # TODO: NEED TO write test CASE FOR THE elif scenario of the bowls add_ingredient method
+    def test_add_multiple_flavors_to_bowl(self):
+        """
+        add two types of flavor packets to a player's bowl to ensure we raise an error.
+        """
+        player = Player('crash test dummy')
+        beef, shrimp, naruto = BeefFlavor(), ShrimpFlavor(), IngredientCard('Naruto')
+
+        with self.assertRaises(Exception):
+            for _ in (beef, shrimp, naruto):
+                player.add_ingredient(_, player.bowl1)
+
 
 if __name__ == '__main__':
     unittest.main()
