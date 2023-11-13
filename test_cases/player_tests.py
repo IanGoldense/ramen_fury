@@ -18,8 +18,7 @@ class PlayerObjectTests(unittest.TestCase):
         self.assertIsNotNone(player.bowl1.flavor,
                              "the bowl's flavor was not assigned after adding a flavor card")
 
-        self.assertEqual(True, False)  # add assertion here
-
+    # TODO: NEED TO write test CASE FOR THE elif scenario of the bowls add_ingredient method
 
 if __name__ == '__main__':
     unittest.main()

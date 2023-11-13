@@ -91,12 +91,15 @@ class Card:
     def __init__(self):
         pass
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> str:
         return self.__str__()
 
-    def __str__(self):
-        # gets the first value from the class instance's dictionary of attributes
-        # i.e. makes every card str() the name of it's class
+    def __str__(self) -> str:
+        """
+        gets the first value from the class instance's dictionary of attributes
+        i.e. makes every card str() the name of it's class
+        :return: name of the object's class type in string form
+        """
         return self.__dict__[next(iter(self.__dict__))]
 
 
@@ -133,6 +136,9 @@ class BeefFlavor(FlavorCard):
             'unique_protein4': 14
         }
 
+    def calculate_score(self, ingredients: deque) -> int:
+        pass
+
 
 class SoySauceFlavor(FlavorCard):
     def __init__(self):
@@ -144,6 +150,9 @@ class SoySauceFlavor(FlavorCard):
             'unique_veg4': 14
         }
 
+    def calculate_score(self, ingredients: deque) -> int:
+        pass
+
 
 class ShrimpFlavor(FlavorCard):
     def __init__(self):
@@ -152,6 +161,9 @@ class ShrimpFlavor(FlavorCard):
             'protein and veg': 4,
             'two protein and two veg': 8
         }
+
+    def calculate_score(self, ingredients: deque) -> int:
+        pass
 
 
 class ChickenFlavor(FlavorCard):
@@ -165,6 +177,7 @@ class ChickenFlavor(FlavorCard):
     def calculate_score(self, ingredients: deque) -> int:
         pass
         # score = 0
+        # if ingredients.__contains__()
         #
         #
         # return score
@@ -240,9 +253,9 @@ class DiscardPile:
 
 
 class Pantry:
-    def __init__(self):
+    def __init__(self, deck):
         self.cards = []  # list of 4 face-up cards
-        self.__fill_pantry()
+        self.__fill_pantry(deck)
 
     def __call__(self, *args, **kwargs):
         return self.__str__()
@@ -340,8 +353,7 @@ class Player:
 
         # adding a flavor packet, declares bowl flavor and determines scoring guide
         # checks if ingredient is a subclass of FlavorCard
-        ic(issubclass(ingredient.__class__, FlavorCard))
-        if ingredient is issubclass(ingredient.__class__, FlavorCard) and bowl.flavor is None:
+        if issubclass(ingredient.__class__, FlavorCard) and bowl.flavor is None:
             bowl.flavor = ingredient
             bowl.ingredients.append(ingredient)
 
