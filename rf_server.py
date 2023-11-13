@@ -326,7 +326,7 @@ class Player:
     def draw(self, deck):
         self.hand.append(deck.draw_one)
 
-    def eat(self):
+    def eat(self, bowl):
         pass
 
     def draw_from_pantry(self, pantry, deck):
@@ -356,16 +356,13 @@ class Player:
         if issubclass(ingredient.__class__, FlavorCard) and bowl.flavor is None:
             bowl.flavor = ingredient
             bowl.ingredients.append(ingredient)
-            print(f"{ingredient} added to the bowl")
 
         # prevent multiple flavor packets from being added to bowl
         elif issubclass(ingredient.__class__, FlavorCard) and bowl.flavor is not None:
-            print(f"{ingredient} added to the bowl ==== ")
             raise Exception("cannot add more than one flavor packet to a bowl.")
 
         # add normal ingredients
         else:
-            print(f"{ingredient} added to the bowl ( as the ELSE clause)")
             bowl.ingredients.append(ingredient)
 
     def play_garnish(self, player):
