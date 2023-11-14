@@ -15,6 +15,24 @@ class FlavorPacketTests(unittest.TestCase):
         """
         make sure the flavor packet calculates score based on the ingredients in the bowl.
         """
+        pass
+
+
+class ChickenFlavorTests(FlavorPacketTests):
+    def setUp(self):
+        # build bowl
+        self.player = Player('clicky chicken')
+        chicken, mushroom1, mushroom2 = ChickenFlavor(), IngredientCard("Mushrooms"), IngredientCard("Mushrooms")
+
+        for _ in (chicken, mushroom1, mushroom2):
+            self.player.add_ingredient(_, self.player.bowl1)
+
+    def test_eat_bowl(self):
+        self.player.eat(self.player.bowl1)
+
+        self.assertEqual(self.player.score,
+                         6,
+                         "player did not score 6 points for eating a bowl of ramen")
 
 
 if __name__ == '__main__':

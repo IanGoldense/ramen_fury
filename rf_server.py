@@ -175,12 +175,26 @@ class ChickenFlavor(FlavorCard):
         }
 
     def calculate_score(self, ingredients: deque) -> int:
-        pass
-        # score = 0
-        # if ingredients.__contains__()
-        #
-        #
-        # return score
+        score = 0
+        ingredient_counts = {}
+
+        # Count occurrences of each ingredient
+        for card in ingredients:
+            if isinstance(card, IngredientCard):
+                ingredient = card.ingredient
+                if ingredient in ingredient_counts:
+                    ingredient_counts[ingredient] += 1
+                else:
+                    ingredient_counts[ingredient] = 1
+
+        # Apply scoring logic
+        for count in ingredient_counts.values():
+            if count == 2:  # Pair
+                score += self.scoring_guide['pair']
+            elif count >= 3:  # Three of a kind
+                score += self.scoring_guide['three of a kind']
+
+        return score
 
 
 class FuryFlavor(FlavorCard):
@@ -295,9 +309,8 @@ class Bowl:
 
     def eat(self) -> int:
         # total up ingredients based on flavor packet scoring guide
-        score = 0
         if self.flavor is not None:
-            self.flavor.calculate_score()
+            return self.flavor.calculate_score(self.ingredients)
 
     def empty(self, discard_pile):
         # discard all ingredients to discard pile
@@ -327,7 +340,7 @@ class Player:
         self.hand.append(deck.draw_one)
 
     def eat(self, bowl):
-        pass
+        self.score += bowl.eat()
 
     def draw_from_pantry(self, pantry, deck):
         # player chooses card from pantry
