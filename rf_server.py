@@ -102,6 +102,10 @@ class Card:
         """
         return self.__dict__[next(iter(self.__dict__))]
 
+    def __repr__(self):
+        # makes any call to the memory address of the object return it's class name
+        return self.__str__()
+
 
 class IngredientCard(Card):
     def __init__(self, ingredient):
@@ -308,13 +312,13 @@ class Bowl:
         self.value = 0
 
     def __count_nori_and_chili(self) -> int:
-        """counts """
+        """counts the nori and chili pepper cards in the ingredients stack"""
         points = 0
         for nori in self.ingredients:
             if isinstance(nori, Nori):
                 points += 1
 
-        if self.ingredients.__contains__(isinstance('FuryFlavor', FuryFlavor)):
+        if self.ingredients.__contains__(FuryFlavor()):
             for chili in self.ingredients:
                 if isinstance(chili, ChiliPepper):
                     points -= 1
@@ -407,7 +411,7 @@ class Player:
             # TODO: come back to this because i forgor what i was doing
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # print_server_details()
     # gather_players(3)
 
