@@ -189,9 +189,9 @@ class ChickenFlavor(FlavorCard):
 
         # Apply scoring logic
         for count in ingredient_counts.values():
-            if count == 2:  # Pair
+            if count == 2:
                 score += self.scoring_guide['pair']
-            elif count >= 3:  # Three of a kind
+            elif count >= 3:
                 score += self.scoring_guide['three of a kind']
 
         return score
@@ -307,10 +307,27 @@ class Bowl:
         self.flavor = None
         self.value = 0
 
+    def __count_nori_and_chili(self) -> int:
+        """counts """
+        points = 0
+        for nori in self.ingredients:
+            if isinstance(nori, Nori):
+                points += 1
+
+        if self.ingredients.__contains__(isinstance('FuryFlavor', FuryFlavor)):
+            for chili in self.ingredients:
+                if isinstance(chili, ChiliPepper):
+                    points -= 1
+
+        return points
+
     def eat(self) -> int:
-        # total up ingredients based on flavor packet scoring guide
+        # total up ingredients based on flavor packet scoring guide and number of nori in bowl
         if self.flavor is not None:
-            return self.flavor.calculate_score(self.ingredients)
+            score = self.flavor.calculate_score(self.ingredients)
+            score += self.__count_nori_and_chili()
+            self.eaten = True
+            return score
 
     def empty(self, discard_pile):
         # discard all ingredients to discard pile
@@ -395,10 +412,10 @@ if __name__ == '__main__':
     # gather_players(3)
 
     # testing
-    test_deck = Deck()
-    test_deck.shuffle()
-    test_discard_pile = DiscardPile()
-    test_pantry = Pantry(test_deck)
-    test_player = Player('Ian')
+    # test_deck = Deck()
+    # test_deck.shuffle()
+    # test_discard_pile = DiscardPile()
+    # test_pantry = Pantry(test_deck)
+    # test_player = Player('Ian')
 
 # test_player.add_ingredient(test_deck.draw_one(), test_player.bowl1)
