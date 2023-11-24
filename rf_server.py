@@ -112,16 +112,16 @@ class IngredientCard(Card):
         self.ingredient = ingredient
 
 
-class Nori(IngredientCard):
+class Nori(Card):
     def __init__(self):
         self.flavor = 'Nori'
         self.scoring_guide = 1
 
 
-class ChiliPepper(IngredientCard):
+class ChiliPepper(Card):
     def __init__(self):
         self.flavor = 'Chili Pepper'
-        self.scoring_guide = -1  # unless with fury flavor not sure how to account for
+        self.scoring_guide = -1  # unless with fury flavor, not sure how to account for
 
 
 class FlavorCard(Card):
@@ -182,9 +182,9 @@ class ChickenFlavor(FlavorCard):
         score = 0
         ingredient_counts = {}
 
-        # Count occurrences of each ingredient
+        # Count occurrences of each ingredient, less chili or nori
         for card in ingredients:
-            if isinstance(card, IngredientCard):
+            if isinstance(card, IngredientCard) and not isinstance(card, ChiliPepper):
                 ingredient = card.ingredient
                 if ingredient in ingredient_counts:
                     ingredient_counts[ingredient] += 1
@@ -209,7 +209,7 @@ class FuryFlavor(FlavorCard):
     def calculate_score(self, ingredients: deque) -> int:
         score = 0
         for _ in ingredients:
-            if _ is ChiliPepper:
+            if isinstance(_, ChiliPepper):
                 score += 2
 
         return score
@@ -326,19 +326,19 @@ class Bowl:
         return points
 
     def eat(self) -> int:
-        # total up ingredients based on flavor packet scoring guide and number of nori in bowl
+        """total up ingredients based on flavor packet scoring guide and number of nori in bowl"""
         if self.flavor is not None:
             score = self.flavor.calculate_score(self.ingredients)
             score += self.__count_nori_and_chili()
             self.eaten = True
-            return score
+            self.value += score
+            # return score
 
     def empty(self, discard_pile):
-        # discard all ingredients to discard pile
-        for ingredient in self.ingredients:
-            discard_pile.discard(ingredient)
-
-        # reset bowl
+        """move all cards to discard pile, remove all ingredients from bowl and reset point value"""
+        [discard_pile.discard(ingredient) for ingredient in self.ingredients]
+        self.ingredients.clear()
+        self.flavor = None
         self.value = 0
 
 
@@ -410,16 +410,15 @@ class Player:
             # player.
             # TODO: come back to this because i forgor what i was doing
 
-
 # if __name__ == '__main__':
-    # print_server_details()
-    # gather_players(3)
+# print_server_details()
+# gather_players(3)
 
-    # testing
-    # test_deck = Deck()
-    # test_deck.shuffle()
-    # test_discard_pile = DiscardPile()
-    # test_pantry = Pantry(test_deck)
-    # test_player = Player('Ian')
+# testing
+# test_deck = Deck()
+# test_deck.shuffle()
+# test_discard_pile = DiscardPile()
+# test_pantry = Pantry(test_deck)
+# test_player = Player('Ian')
 
 # test_player.add_ingredient(test_deck.draw_one(), test_player.bowl1)

@@ -29,7 +29,7 @@ class FuryFlavorTests(FlavorPacketTests):
     def setUp(self):
         """creates a player with fury packet and three chili cards in bowl 1"""
         self.player = Player('Spicy shogun')
-        fury_flavor, chili = FuryFlavor(), IngredientCard("Chili Peppers")
+        fury_flavor, chili = FuryFlavor(), ChiliPepper()
 
         for _ in (fury_flavor, chili, chili, chili):
             self.player.add_ingredient(_, self.player.bowl1)
@@ -38,19 +38,14 @@ class FuryFlavorTests(FlavorPacketTests):
         """test adds a chili pepper and a nori garnish with a beef flavor, which should equal 0.
          this tests the bowl.count_nori_and_chili method"""
         # instantiate
-        discard = DiscardPile()
-        chili, nori, beef_flavor = ChiliPepper(), Nori(), BeefFlavor()
+        discard_pile = DiscardPile()
+        chili, nori, chicken_flavor = ChiliPepper(), Nori(), ChickenFlavor()
 
-        # add ingredients to bowl
-        self.player.bowl1.empty(discard)
+        # empty setUp bowl, add ingredients to bowl
+        self.player.bowl1.empty(discard_pile)
 
-        print(f'bowl ingredients: {self.player.bowl1.ingredients}')
-
-        for _ in (chili, nori, beef_flavor):
+        for _ in (chili, nori, chicken_flavor):
             self.player.add_ingredient(_, self.player.bowl1)
-
-        print(f'bowl ingredients: {self.player.bowl1.ingredients}')
-
 
         self.player.bowl1.eat()
 
@@ -65,10 +60,11 @@ class FuryFlavorTests(FlavorPacketTests):
         test_nori = Nori()
         self.player.add_ingredient(test_nori, self.player.bowl1)
 
-        self.player.bowl1.eat()
+        points_scored = self.player.bowl1.eat()
+        print(f"points scored: {points_scored}")
 
         self.assertEqual(7,
-                         self.player.bowl1.score,
+                         self.player.bowl1.value,
                          "bowl score did not get totalled correctly. three chili and a nori should be 7 points")
 
 
