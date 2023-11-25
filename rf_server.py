@@ -129,33 +129,56 @@ class FlavorCard(Card):
         self.flavor = 'plain'
         self.scoring_guide = {}
 
+    def calc_score_for_unique_ingredients(self, ingredients: deque):
+        pass
+        # this could be a shared method between the Beef and SoySauce classes, but that requires a more complex method,
+        # so i am building a janky first version for now to get it working.
+
 
 class BeefFlavor(FlavorCard):
     def __init__(self):
         self.flavor = 'Beef Flavor'
         self.scoring_guide = {
-            'unique_protein1': 2,
-            'unique_protein2': 5,
-            'unique_protein3': 9,
-            'unique_protein4': 14
+            0: 0,  # nothing in the bowl =(
+            1: 2,  # 1 unique protein
+            2: 5,  # 2 unique protein
+            3: 9,  # 3 unique protein
+            4: 14  # 4 unique protein
         }
 
     def calculate_score(self, ingredients: deque) -> int:
-        pass
+        unique_proteins = set()
+
+        # build set of unique ingredients
+        for card in ingredients:
+            if card.ingredient in protein_ingredient_cards:
+                unique_proteins.add(card)
+
+        # dictionary lookup with index equal to length of ingredient set
+        return self.scoring_guide[len(unique_proteins)]
 
 
 class SoySauceFlavor(FlavorCard):
     def __init__(self):
         self.flavor = 'SoySauce Flavor'
         self.scoring_guide = {
-            'unique_veg1': 2,
-            'unique_veg2': 5,
-            'unique_veg3': 9,
-            'unique_veg4': 14
+            0: 0,  # nothing in the bowl =(
+            1: 2,  # 1 unique veg
+            2: 5,  # 2 unique veg
+            3: 9,  # 3 unique veg
+            4: 14  # 4 unique veg
         }
 
     def calculate_score(self, ingredients: deque) -> int:
-        pass
+        unique_veg = set()
+
+        # build set of unique ingredients
+        for card in ingredients:
+            if card.ingredient in veg_ingredient_cards:
+                unique_veg.add(card)
+
+        # dictionary lookup with index equal to length of ingredient set
+        return self.scoring_guide[len(unique_veg)]
 
 
 class ShrimpFlavor(FlavorCard):
@@ -332,7 +355,6 @@ class Bowl:
             score += self.__count_nori_and_chili()
             self.eaten = True
             self.value += score
-            # return score
 
     def empty(self, discard_pile):
         """move all cards to discard pile, remove all ingredients from bowl and reset point value"""

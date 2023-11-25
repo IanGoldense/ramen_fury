@@ -17,12 +17,40 @@ class FlavorPacketTests(unittest.TestCase):
 
 class ChickenFlavorTests(FlavorPacketTests):
     def setUp(self):
-        # build bowl
+        """creates a player with a ChickenFlavor and two mushroom ingredients in bowl1"""
         self.player = Player('clicky chicken')
         chicken, mushroom1, mushroom2 = ChickenFlavor(), IngredientCard("Mushrooms"), IngredientCard("Mushrooms")
 
+        # add ingredients
         for _ in (chicken, mushroom1, mushroom2):
             self.player.add_ingredient(_, self.player.bowl1)
+
+    def test_pair_score(self):
+        self.player.bowl1.eat()
+
+        self.assertEqual(6,
+                         self.player.bowl1.value,
+                         "bowl was not valued at 6 points for having a pair of ingredients in a chicken flavored bowl")
+
+    def test_three_of_a_kind_score(self):
+        self.player.add_ingredient(IngredientCard("Mushrooms"), self.player.bowl1)
+
+        self.player.bowl1.eat()
+
+        self.assertEqual(10,
+                         self.player.bowl1.value,
+                         "bowl was not valued at 10 points for having three like ingredients in a"
+                         " chicken flavored bowl")
+
+    def test_pair_with_nori(self):
+        self.player.add_ingredient(Nori(), self.player.bowl1)
+
+        self.player.bowl1.eat()
+
+        self.assertEqual(7,
+                         self.player.bowl1.value,
+                         "bowl was not valued at 7 points for having a pair of ingredients and a nori in a "
+                         "chicken flavored bowl")
 
 
 class FuryFlavorTests(FlavorPacketTests):
