@@ -191,6 +191,10 @@ class ShrimpFlavor(FlavorCard):
 
     def calculate_score(self, ingredients: deque) -> int:
         pass
+        # # if ingredients contains a veg and a protein
+        # if
+        #
+        # # if ingredients contains two veg and two proteins
 
 
 class ChickenFlavor(FlavorCard):
@@ -320,11 +324,12 @@ class Pantry:
         self.cards.clear()
         self.__fill_pantry(deck)
 
-    def pick_card(self):
-        # remove chosen card from pantry
-
-        # draw card from deck to replace it
-        pass
+    # def pick_card(self):
+    #     TODO: may be deleted later. drawing from pantry is currently handled by the Player.draw_from_pantry method
+    #     # remove chosen card from pantry
+    #
+    #     # draw card from deck to replace it
+    #     pass
 
 
 class Bowl:
@@ -389,14 +394,20 @@ class Player:
         # player chooses card from pantry
         print(f"cards in pantry: ", pantry.cards)
         picked_card = input("choose card 1 - 4: ")
-        # TODO: sanitize the input loop and pass in valid options for player to choose from
+        # TODO: make input part of a loop and sanitize passed in values
+
+        # move input value back one int to align with the list index
         picked_card = int(picked_card) - 1
 
-        # card is added to their hand
+        # card is added to their hand and removed from the pantry
         self.hand.append(pantry.cards[picked_card])
+        pantry.cards.remove(pantry.cards[picked_card])
 
-        # new card is added to the pantry from the deck
-        while pantry.cards < 4:
+        # # remove card from pantry
+        # pantry.restock()
+
+        # new card is added to the pantry from the deck, bringing it up to 4 cards
+        while len(pantry.cards) < 4:
             pantry.cards.append(deck.draw_one())
 
     def empty_bowl(self, bowl, discard_pile):

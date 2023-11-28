@@ -1,8 +1,10 @@
-# testing
+from rf_server import *
+
+# console testing
 test_deck = Deck()
 test_deck.shuffle()
-test_discard_pile = DiscardPile()
-test_pantry = Pantry(test_deck)
-test_player = Player('Ian')
+discard_pile = DiscardPile()
+pantry = Pantry(test_deck)
+ian = Player('Ian')
 
-test_player.add_ingredient(test_deck.draw_one(), test_player.bowl1)
+ian.add_ingredient(test_deck.draw_one(), ian.bowl1)
