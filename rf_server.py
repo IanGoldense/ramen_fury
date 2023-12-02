@@ -490,6 +490,7 @@ class Player:
             # add nori card to opponent players bowl and remove it from active players hand
             player.add_ingredient(Nori(), bowl_dict[bowl])
             self.hand.remove(Nori())
+            # TODO: build a test case for this.
 
 
 # if __name__ == '__main__':
