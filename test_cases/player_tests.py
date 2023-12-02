@@ -11,7 +11,6 @@ class PlayerObjectTests(unittest.TestCase):
         self.deck.shuffle()
         self.pantry = Pantry(self.deck)
 
-
     def test_add_ingredients_to_bowl(self):
         beef, naruto = BeefFlavor(), IngredientCard('Naruto')
 
@@ -38,11 +37,9 @@ class PlayerObjectTests(unittest.TestCase):
     @patch('builtins.input', side_effect=[1])
     def test_draw_from_pantry(self, mock_object):
         """player draws from pantry and adds to hand. test pantry refills, and hand updates"""
-
-        print(mock_object)
         expected_card = self.pantry.cards[0]
 
-        # side effect picks the first card from pantry. mock_object is implicitly used here
+        # @patch and side effect picks the first card from pantry. mock_object is implicitly used here
         self.player.draw_from_pantry(self.pantry, self.deck)
 
         actual_card = self.player.hand[0]

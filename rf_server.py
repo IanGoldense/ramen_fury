@@ -88,9 +88,6 @@ class Game:
 
 
 class Card:
-    def __init__(self):
-        pass
-
     def __call__(self, *args, **kwargs) -> str:
         return self.__str__()
 
@@ -103,7 +100,7 @@ class Card:
         return self.__dict__[next(iter(self.__dict__))]
 
     def __repr__(self):
-        # makes any call to the memory address of the object return it's class name
+        """makes any call to the memory address of the object return it's class name"""
         return self.__str__()
 
 
@@ -147,14 +144,19 @@ class BeefFlavor(FlavorCard):
         }
 
     def calculate_score(self, ingredients: deque) -> int:
-        unique_proteins = set()
+        """
+        called by a Bowl object when calculating the score to return the value of all the ingredients.
+        :param ingredients: stack object of all ingredients that have been added to the bowl.
+        :return: int. value of the bowl. should be added to the player.score attribute.
+        """
 
-        # build set of unique ingredients
+        # build set of unique veg ingredients
+        unique_proteins = set()
         for card in ingredients:
             if card.ingredient in protein_ingredient_cards:
                 unique_proteins.add(card)
 
-        # dictionary lookup with index equal to length of ingredient set
+        # dictionary lookup with index equal to length of unique ingredient set
         return self.scoring_guide[len(unique_proteins)]
 
 
@@ -170,9 +172,14 @@ class SoySauceFlavor(FlavorCard):
         }
 
     def calculate_score(self, ingredients: deque) -> int:
-        unique_veg = set()
+        """
+        called by a Bowl object when calculating the score to return the value of all the ingredients.
+        :param ingredients: stack object of all ingredients that have been added to the bowl.
+        :return: int. value of the bowl. should be added to the player.score attribute.
+        """
 
-        # build set of unique ingredients
+        # build set of unique veg ingredients
+        unique_veg = set()
         for card in ingredients:
             if card.ingredient in veg_ingredient_cards:
                 unique_veg.add(card)
@@ -317,6 +324,13 @@ class Pantry:
             self.cards.append(deck.draw_one())
 
     def restock(self, deck, discard_pile):
+        """
+        Remove all the cards from the Pantry and replace them with four new ones from the deck.
+        The special abilities on any Chili Peppers or Nori Garnish are activated when a player restocks.
+        :param deck: deck instance. new pantry cards are drawn from deck.
+        :param discard_pile: discard_pile instance. Old pantry cards are moved to here
+        :return:
+        """
         # move old cards to the discard pile
         for card in self.cards:
             discard_pile.discard(card)
@@ -324,12 +338,7 @@ class Pantry:
         self.cards.clear()
         self.__fill_pantry(deck)
 
-    # def pick_card(self):
-    #     TODO: may be deleted later. drawing from pantry is currently handled by the Player.draw_from_pantry method
-    #     # remove chosen card from pantry
-    #
-    #     # draw card from deck to replace it
-    #     pass
+        # TODO: give player the option to play any chili pepper or nori garnish that is dran from the pantry in this way
 
 
 class Bowl:
@@ -353,16 +362,26 @@ class Bowl:
 
         return points
 
-    def eat(self) -> int:
-        """total up ingredients based on flavor packet scoring guide and number of nori in bowl"""
-        if self.flavor is not None:
+    def eat(self) -> None:
+        """
+        A Ramen Bowl must have one Flavor Ingredient and at least one other ingredient before it can be eaten.
+        A bowl that has been eaten cannot have more ingredients added or taken away.
+        :return: static function. sets bowl attributes
+        """
+        if self.eaten is False and self.flavor is not None and len(self.ingredients) >= 2:
             score = self.flavor.calculate_score(self.ingredients)
             score += self.__count_nori_and_chili()
             self.eaten = True
             self.value += score
 
-    def empty(self, discard_pile):
-        """move all cards to discard pile, remove all ingredients from bowl and reset point value"""
+        elif self.eaten is True:
+            raise Exception("bowl has already been eaten.")
+
+        else:
+            raise Exception("bowl must have a flavor ingredient and one other ingredient.")
+
+    def empty(self, discard_pile) -> None:
+        """remove all ingredients from bowl, move them to discard pile and reset point value"""
         [discard_pile.discard(ingredient) for ingredient in self.ingredients]
         self.ingredients.clear()
         self.flavor = None
@@ -372,7 +391,7 @@ class Bowl:
 class Player:
     def __init__(self, name):
         self.name = name
-        self.last_ate_ramen = None  # TODO: make this a parameter later
+        self.last_ate_ramen = None  # TODO: make this a parameter later, or call the function
         self.hand = []
         self.spoons = 2
         self.bowl1 = Bowl()
@@ -380,9 +399,8 @@ class Player:
         self.bowl3 = Bowl()
         self.score = 0
 
-    def restock(self, pantry):
-        pantry.cards.clear()
-        pantry.restock()
+    def restock(self, pantry, discard_pile) -> None:
+        pantry.restock(pantry, discard_pile)
 
     def draw(self, deck):
         self.hand.append(deck.draw_one)
@@ -391,10 +409,21 @@ class Player:
         self.score += bowl.eat()
 
     def draw_from_pantry(self, pantry, deck):
+        """
+        asks the player to choose a card from the pantry and adds it to their hand.
+        :param pantry: pantry object.
+        :param deck: deck object.
+        :return: None
+        """
         # player chooses card from pantry
         print(f"cards in pantry: ", pantry.cards)
-        picked_card = input("choose card 1 - 4: ")
-        # TODO: make input part of a loop and sanitize passed in values
+
+        # sanitize input
+        picked_card = 0
+        valid_choices = (1, 2, 3, 4)
+        while picked_card not in valid_choices:
+            picked_card = input("choose card 1 - 4: ")
+            print("invalid choice, try again.") if picked_card not in valid_choices else None
 
         # move input value back one int to align with the list index
         picked_card = int(picked_card) - 1
@@ -402,9 +431,6 @@ class Player:
         # card is added to their hand and removed from the pantry
         self.hand.append(pantry.cards[picked_card])
         pantry.cards.remove(pantry.cards[picked_card])
-
-        # # remove card from pantry
-        # pantry.restock()
 
         # new card is added to the pantry from the deck, bringing it up to 4 cards
         while len(pantry.cards) < 4:
