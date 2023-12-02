@@ -439,7 +439,13 @@ class Player:
     def empty_bowl(self, bowl, discard_pile):
         bowl.empty(discard_pile)
 
-    def add_ingredient(self, ingredient, bowl):
+    def add_ingredient(self, ingredient, bowl) -> None:
+        """
+        player moves an ingredient from their hand to a bowl.
+        :param ingredient: ingredient card to be added to the bowl.
+        :param bowl: one of the player's bowl objects. must be the player's own bowls.
+        :return: None
+        """
         # ensure player is only adding to their own bowl
         if bowl not in (self.bowl1, self.bowl2, self.bowl3):
             raise ValueError("You can only add ingredients to your own bowls.")
@@ -459,15 +465,32 @@ class Player:
             bowl.ingredients.append(ingredient)
 
     def play_garnish(self, player):
-        if self.hand.__contains__(Nori):
-            print(f"{player.name}'s bowls. input 1,2 or 3:"
-                  f"{player.bowl1}"
-                  f"{player.bowl2}"
-                  f"{player.bowl3}")
+        """
+        player adds a Nori garnish card from their hand to another player's bowl of their choice.
+        :param player: opponent player.
+        :return:
+        """
+        # dict lookup. maps opponent player's bowls to integers we get from the input() later
+        bowl_dict = {
+            1: player.bowl1,
+            2: player.bowl2,
+            3: player.bowl3
+        }
 
-            bowl = input("where to play garnish?")
-            # player.
-            # TODO: come back to this because i forgor what i was doing
+        # if player has a Nori, ask which bowl should receive it.
+        if self.hand.__contains__(Nori):
+            bowl = None
+            while bowl is not (1, 2, 3):
+                print(f"{player.name}'s bowls. input 1,2 or 3:"
+                      f"{player.bowl1}"
+                      f"{player.bowl2}"
+                      f"{player.bowl3}")
+                bowl = input("where to play garnish?")
+
+            # add nori card to opponent players bowl and remove it from active players hand
+            player.add_ingredient(Nori(), bowl_dict[bowl])
+            self.hand.remove(Nori())
+
 
 # if __name__ == '__main__':
 # print_server_details()
