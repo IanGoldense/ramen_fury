@@ -40,6 +40,7 @@ class PlayerObjectTests(unittest.TestCase):
         expected_card = self.pantry.cards[0]
 
         # @patch and side effect picks the first card from pantry. mock_object is implicitly used here
+        # because player.draw_from_pantry is the method calling input()
         self.player.draw_from_pantry(self.pantry, self.deck)
 
         actual_card = self.player.hand[0]
@@ -48,6 +49,25 @@ class PlayerObjectTests(unittest.TestCase):
                          actual_card,
                          f"card in hand ({actual_card}) does not match card found in"
                          f" pantry before selection ({expected_card})")
+
+    @patch('builtins.input', side_effect=[1])
+    def test_play_garnish(self, mock_object):
+        self.opponent = Player('Bob Bastard')
+        self.player.play_garnish(self.opponent)
+        test_nori = Nori()
+
+        self.player.hand.append(test_nori)  # give player cards to play
+        self.player.play_garnish(self.opponent)  # play garnish card into opponent hand. @Patch used here
+
+        # assert nori was removed from player 1's hand
+        self.assertNotIn(test_nori,
+                         self.player.hand,
+                         f'players hand was not an empty list. Player is holding: {self.player.hand}.')
+
+        # assert player 2 has a nori
+        self.assertIn(test_nori,
+                      self.opponent.hand,
+                      'a nori was not found in opponents hand')
 
 
 if __name__ == '__main__':

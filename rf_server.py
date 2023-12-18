@@ -199,7 +199,6 @@ class ShrimpFlavor(FlavorCard):
     def calculate_score(self, ingredients: deque) -> int:
         pass
         # # if ingredients contains a veg and a protein
-        # if
         #
         # # if ingredients contains two veg and two proteins
 
@@ -470,7 +469,7 @@ class Player:
         :param player: opponent player.
         :return:
         """
-        # dict lookup. maps opponent player's bowls to integers we get from the input() later
+        # dict lookup. Map opponent player's bowls to integers we get from the input() later
         bowl_dict = {
             1: player.bowl1,
             2: player.bowl2,
@@ -480,7 +479,7 @@ class Player:
         # if player has a Nori, ask which bowl should receive it.
         if self.hand.__contains__(Nori):
             bowl = None
-            while bowl is not (1, 2, 3):
+            while bowl not in (1, 2, 3):
                 print(f"{player.name}'s bowls. input 1,2 or 3:"
                       f"{player.bowl1}"
                       f"{player.bowl2}"
@@ -497,11 +496,3 @@ class Player:
 # print_server_details()
 # gather_players(3)
 
-# testing
-# test_deck = Deck()
-# test_deck.shuffle()
-# test_discard_pile = DiscardPile()
-# test_pantry = Pantry(test_deck)
-# test_player = Player('Ian')
-
-# test_player.add_ingredient(test_deck.draw_one(), test_player.bowl1)
