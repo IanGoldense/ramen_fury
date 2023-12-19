@@ -402,7 +402,7 @@ class Player:
         pantry.restock(pantry, discard_pile)
 
     def draw(self, deck):
-        self.hand.append(deck.draw_one)
+        self.hand.append(deck.draw_one())
 
     def eat(self, bowl):
         self.score += bowl.eat()
@@ -488,8 +488,15 @@ class Player:
 
             # add nori card to opponent players bowl and remove it from active players hand
             player.add_ingredient(Nori(), bowl_dict[bowl])
-            self.hand.remove(Nori())
-            # TODO: build a test case for this.
+
+            # find the first nori in the hand and remove it
+            for card in self.hand:
+                if isinstance(card, Nori):
+                    self.hand.remove(card)
+                    break
+
+        else:
+            print("player does not have a Nori card")
 
 
 # if __name__ == '__main__':

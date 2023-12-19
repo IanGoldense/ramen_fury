@@ -11,6 +11,12 @@ class PlayerObjectTests(unittest.TestCase):
         self.deck.shuffle()
         self.pantry = Pantry(self.deck)
 
+    def test_draw_from_deck(self):
+        self.player.draw(self.deck)
+        self.assertIsInstance(self.player.hand[0],
+                              Card,
+                              "player did not get a card placed into their hand when drawing from the deck")
+
     def test_add_ingredients_to_bowl(self):
         beef, naruto = BeefFlavor(), IngredientCard('Naruto')
 
@@ -55,8 +61,10 @@ class PlayerObjectTests(unittest.TestCase):
         self.opponent = Player('Bob Bastard')
         self.player.play_garnish(self.opponent)
         test_nori = Nori()
+        test_chili = ChiliPepper()
 
-        self.player.hand.append(test_nori)  # give player cards to play
+        self.player.hand.append(Nori())  # give player cards to play
+        self.player.hand.append(test_chili)
         self.player.play_garnish(self.opponent)  # play garnish card into opponent hand. @Patch used here
 
         # assert nori was removed from player 1's hand
