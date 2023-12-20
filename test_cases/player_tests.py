@@ -58,14 +58,14 @@ class PlayerObjectTests(unittest.TestCase):
 
     @patch('builtins.input', side_effect=[1])
     def test_play_garnish(self, mock_object):
-        self.opponent = Player('Bob Bastard')
-        self.player.play_garnish(self.opponent)
+        self.target_player = Player('Bob Bastard')
+        self.player.play_garnish(self.target_player)
         test_nori = Nori()
         test_chili = ChiliPepper()
 
         self.player.hand.append(Nori())  # give player cards to play
         self.player.hand.append(test_chili)
-        self.player.play_garnish(self.opponent)  # play garnish card into opponent hand. @Patch used here
+        self.player.play_garnish(self.target_player)  # play garnish card into target_player hand. @Patch used here
 
         # assert nori was removed from player 1's hand
         self.assertNotIn(test_nori,
@@ -74,7 +74,7 @@ class PlayerObjectTests(unittest.TestCase):
 
         # assert player 2 has a nori
         self.assertIn(test_nori,
-                      self.opponent.hand,
+                      self.target_player.bowl1,
                       'a nori was not found in opponents hand')
 
 

@@ -347,6 +347,13 @@ class Bowl:
         self.flavor = None
         self.value = 0
 
+    def __str__(self):
+        # TODO: this could be beautified a lot more to print a comprehensive list of bowl ingredients
+        return str(self.ingredients)
+
+    def __iter__(self):
+        return self.ingredients[::-1]
+
     def __count_nori_and_chili(self) -> int:
         """counts the nori and chili pepper cards in the ingredients stack"""
         points = 0
@@ -476,8 +483,8 @@ class Player:
             3: player.bowl3
         }
 
-        # if player has a Nori, ask which bowl should receive it.
-        if self.hand.__contains__(Nori):
+        # if and held card is an instance of Nori, ask which bowl should receive it.
+        if any(isinstance(card, Nori) for card in self.hand):
             bowl = None
             while bowl not in (1, 2, 3):
                 print(f"{player.name}'s bowls. input 1,2 or 3:"
