@@ -268,7 +268,13 @@ class Deck:
         self.__add_num_of_card(8, Nori())
         self.__add_num_of_card(12, ChiliPepper())
 
-    def __add_num_of_card(self, num: int, card: object):
+    def __add_num_of_card(self, num: int, card: Card):
+        """
+        appends num of cards to the self.cards attribute. Used when generating a deck.
+        :param num: number of cards to be added.
+        :param card: card type to be added.
+        :return: None.
+        """
         card_group = []
         for i in range(0, num):
             self.cards.append(card)
@@ -288,9 +294,9 @@ class Deck:
     # annotations' but it was pulled last second. Python 3.6 implements string literal annotations so use that.
     def deal(self, *players: 'Player') -> None:
         """
-        deal five cards to each player
+        deal five cards to each player.
         :param players: instances of Player class. should be no more than five players as-per game rules.
-        :return:
+        :return: none.
         """
         for player in (players * 5):
             player.draw(self)

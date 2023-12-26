@@ -1,6 +1,4 @@
-import builtins
 import unittest
-from unittest.mock import patch
 from rf_server import *
 
 
@@ -20,6 +18,16 @@ class DeckObjectTests(unittest.TestCase):
             self.assertEqual(5,
                              len(player.hand),
                              f"{player.name} does not have 5 cards in their hand")
+
+    def test_shuffle(self):
+        card1, card2, card3 = self.test_deck.cards[0], self.test_deck.cards[1], self.test_deck.cards[3]
+        self.test_deck.shuffle()
+        card4, card5, card6 = self.test_deck.cards[0], self.test_deck.cards[1], self.test_deck.cards[3]
+
+        self.assertNotEqual((card1, card2, card3),
+                            (card4, card5, card6),
+                            f"the first and second card in the deck matched, "
+                            f"there's a very small chance this could naturally fail but it's very unlikely")
 
 
 if __name__ == '__main__':
