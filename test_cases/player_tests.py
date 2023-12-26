@@ -30,6 +30,16 @@ class PlayerObjectTests(unittest.TestCase):
         self.assertIsNotNone(self.player.bowl1.flavor,
                              "the bowl's flavor was not assigned after adding a flavor card")
 
+    def test_card_removed_from_hand(self):
+        mushroom_deck = Deck()
+        self.player.draw(mushroom_deck)  # gives player a mushroom card
+        self.player.add_ingredient(self.player.hand[0], self.player.bowl1)
+
+        self.assertNotIn(mushroom_deck.cards[0],
+                         self.player.hand,
+                         f"mushroom was not removed from players hand after being played."
+                         f" player's hand: {self.player.hand}")
+
     def test_add_multiple_flavors_to_bowl(self):
         """
         add two types of flavor packets to a player's bowl to ensure we raise an error.
@@ -63,7 +73,7 @@ class PlayerObjectTests(unittest.TestCase):
         test_nori = Nori()
         test_chili = ChiliPepper()
 
-        self.player.hand.append(Nori())  # give player cards to play
+        self.player.hand.append(Nori())  # give the player cards to play
         self.player.hand.append(test_chili)
         self.player.play_garnish(self.target_player)  # play garnish card into target_player hand. @Patch used here
 
@@ -72,9 +82,10 @@ class PlayerObjectTests(unittest.TestCase):
                          self.player.hand,
                          f'players hand was not an empty list. Player is holding: {self.player.hand}.')
 
+        print(f"debug: {self.target_player.bowl1.ingredients}")
         # assert player 2 has a nori
         self.assertIn(test_nori,
-                      self.target_player.bowl1,
+                      self.target_player.bowl1.ingredients,
                       'a nori was not found in opponents hand')
 
 

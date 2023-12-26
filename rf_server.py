@@ -480,7 +480,7 @@ class Player:
         else:
             bowl.ingredients.append(ingredient)
 
-        self.hand.remove(ingredient)  # remove ingredient from hand after use
+        self.hand.remove(ingredient)
 
     def play_garnish(self, player):
         """
