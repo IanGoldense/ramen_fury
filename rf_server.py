@@ -284,9 +284,9 @@ class Deck:
 
         self.cards = bottom_half + top_half
 
-    def deal(self, roster):
+    def deal(self, *players):
         # everyone in the roster gets five cards
-        dealer_rotation = roster * 5
+        dealer_rotation = players * 5
 
         for player in dealer_rotation:
             player.draw(self.draw_one())
@@ -408,7 +408,7 @@ class Player:
     def restock(self, pantry, discard_pile) -> None:
         pantry.restock(pantry, discard_pile)
 
-    def draw(self, deck):
+    def draw(self, deck: Deck):
         self.hand.append(deck.draw_one())
 
     def eat(self, bowl):
@@ -470,6 +470,8 @@ class Player:
         else:
             bowl.ingredients.append(ingredient)
 
+        self.hand.remove(ingredient)  # remove ingredient from hand after use
+
     def play_garnish(self, player):
         """
         player adds a Nori garnish card from their hand to another player's bowl of their choice.
@@ -483,7 +485,7 @@ class Player:
             3: player.bowl3
         }
 
-        # if and held card is an instance of Nori, ask which bowl should receive it.
+        # if any held card is an instance of Nori, ask which bowl should receive it.
         if any(isinstance(card, Nori) for card in self.hand):
             bowl = None
             while bowl not in (1, 2, 3):
@@ -496,17 +498,11 @@ class Player:
             # add nori card to opponent players bowl and remove it from active players hand
             player.add_ingredient(Nori(), bowl_dict[bowl])
 
-            # find the first nori in the hand and remove it
-            for card in self.hand:
-                if isinstance(card, Nori):
-                    self.hand.remove(card)
-                    break
-
         else:
             print("player does not have a Nori card")
 
 
 # if __name__ == '__main__':
-# print_server_details()
-# gather_players(3)
-
+ian, emily, maxy, beans, kayla = Player('Ian'), Player('Emily'), Player('Maxy'), Player('Beans'), Player('Kayla')
+deck, discard_pile = Deck(), DiscardPile()
+pantry = Pantry
