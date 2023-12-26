@@ -284,12 +284,16 @@ class Deck:
 
         self.cards = bottom_half + top_half
 
-    def deal(self, *players):
-        # everyone in the roster gets five cards
-        dealer_rotation = players * 5
-
-        for player in dealer_rotation:
-            player.draw(self.draw_one())
+    # this string type hint is a stupid python 3.10 change. PEP 563 was going to enable 'postponed evaluation of
+    # annotations' but it was pulled last second. Python 3.6 implements string literal annotations so use that.
+    def deal(self, *players: 'Player') -> None:
+        """
+        deal five cards to each player
+        :param players: instances of Player class. should be no more than five players as-per game rules.
+        :return:
+        """
+        for player in (players * 5):
+            player.draw(self)
 
     def draw_one(self):
         return self.cards.pop(0)
